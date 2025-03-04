@@ -1,0 +1,14 @@
+name: Tests
+on: push
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - name: install dependencies
+        run: |
+          uv sync
+      - name: run tests
+        run: |
+          uv run -m unittest

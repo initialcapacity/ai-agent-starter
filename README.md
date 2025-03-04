@@ -14,3 +14,9 @@ An AI Agent that can answer questions about GitHub repositories for a user or an
     ```shell
     uv run -m explorer
     ```
+
+## Test
+
+```shell
+uv run -m unittest
+```
