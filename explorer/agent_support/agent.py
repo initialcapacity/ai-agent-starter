@@ -1,10 +1,12 @@
 import json
+import logging
 from typing import List
 
 from openai import OpenAI
 
 from explorer.agent_support.tool import Tool
 
+logger = logging.getLogger(__name__)
 
 class Agent:
     def __init__(self, client: OpenAI, model: str, instructions: str, tools: List[Tool]):
@@ -26,12 +28,12 @@ class Agent:
 
         run = self.client.beta.threads.runs.create_and_poll(thread_id=thread.id, assistant_id=self.assistant_id)
         while run.status != "completed":
-            print(f"status: {run.status}")
+            logger.debug(f"status %s", run.status)
             tool_outputs = []
             for tool_call in run.required_action.submit_tool_outputs.tool_calls:
                 function_name = tool_call.function.name
                 arguments = json.loads(tool_call.function.arguments)
-                print(f"calling {function_name} with args {arguments}")
+                logger.debug(f"calling %s with args %s", function_name, arguments)
 
                 tool = next((tool for tool in self.tools if tool.name == function_name), None)
                 if tool is None:

@@ -1,3 +1,5 @@
+import logging
+
 from openai import OpenAI
 
 from explorer.agent_support.agent import Agent
@@ -6,6 +8,10 @@ from explorer.github_support.github_client import GithubClient
 from explorer.github_tools import github_tools
 
 env = Environment.from_env()
+logging.basicConfig(level=env.root_log_level)
+logging.getLogger('httpx').setLevel(level=env.httpx_log_level)
+logging.getLogger('explorer').setLevel(level=env.explorer_log_level)
+
 openai_client = OpenAI(api_key=env.open_ai_key)
 github_client = GithubClient(access_token=env.github_token)
 
