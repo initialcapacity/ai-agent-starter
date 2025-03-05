@@ -6,6 +6,16 @@ from explorer.github_support.github_client import GithubClient, Repository
 
 class TestGithubClient(unittest.TestCase):
     def setUp(self):
+        self.repo_dict = {
+            "name": "some_repo",
+            "full_name": "some_organization/some_repo",
+            "html_url": "https://example.com/some_owner/some_repo",
+            "url": "https://api.example.com/some_owner/some_repo",
+            "description": "Just some repo",
+            "stargazers_count": 12,
+            "watchers_count": 13,
+            "forks_count": 14,
+        }
         self.client = GithubClient("some_access_token")
 
     @responses.activate
@@ -13,15 +23,7 @@ class TestGithubClient(unittest.TestCase):
         responses.add(
             responses.GET,
             "https://api.github.com/orgs/some_organization/repos",
-            json=[
-                {
-                    "name": "some_repo",
-                    "full_name": "some_organization/some_repo",
-                    "html_url": "https://example.com/some_organization/some_repo",
-                    "url": "https://api.example.com/some_organization/some_repo",
-                    "description": "Just some repo",
-                }
-            ],
+            json=[self.repo_dict],
             status=200,
         )
 
@@ -36,9 +38,12 @@ class TestGithubClient(unittest.TestCase):
             Repository(
                 name="some_repo",
                 full_name="some_organization/some_repo",
-                html_url="https://example.com/some_organization/some_repo",
-                api_url="https://api.example.com/some_organization/some_repo",
+                html_url="https://example.com/some_owner/some_repo",
+                api_url="https://api.example.com/some_owner/some_repo",
                 description="Just some repo",
+                stars=12,
+                watching=13,
+                forks=14,
             )
         ], result)
 
@@ -47,15 +52,7 @@ class TestGithubClient(unittest.TestCase):
         responses.add(
             responses.GET,
             "https://api.github.com/user/some_user/repos",
-            json=[
-                {
-                    "name": "some_repo",
-                    "full_name": "some_organization/some_repo",
-                    "html_url": "https://example.com/some_user/some_repo",
-                    "url": "https://api.example.com/some_user/some_repo",
-                    "description": "Just some repo",
-                }
-            ],
+            json=[self.repo_dict],
             status=200,
         )
 
@@ -65,9 +62,12 @@ class TestGithubClient(unittest.TestCase):
             Repository(
                 name="some_repo",
                 full_name="some_organization/some_repo",
-                html_url="https://example.com/some_user/some_repo",
-                api_url="https://api.example.com/some_user/some_repo",
+                html_url="https://example.com/some_owner/some_repo",
+                api_url="https://api.example.com/some_owner/some_repo",
                 description="Just some repo",
+                stars=12,
+                watching=13,
+                forks=14,
             )
         ], result)
 
@@ -77,15 +77,7 @@ class TestGithubClient(unittest.TestCase):
             responses.GET,
             "https://api.github.com/search/repositories",
             json={
-                "items": [
-                    {
-                        "name": "some_repo",
-                        "full_name": "some_organization/some_repo",
-                        "html_url": "https://example.com/some_organization/some_repo",
-                        "url": "https://api.example.com/some_organization/some_repo",
-                        "description": "Just some repo",
-                    }
-                ]
+                "items": [self.repo_dict]
             },
             status=200,
         )
@@ -97,15 +89,19 @@ class TestGithubClient(unittest.TestCase):
         )
 
         self.assertEqual(1, len(responses.calls))
-        self.assertEqual("/search/repositories?q=org:some_organization%20language:kotlin", responses.calls[0].request.path_url)
+        self.assertEqual("/search/repositories?q=org:some_organization%20language:kotlin",
+                         responses.calls[0].request.path_url)
 
         self.assertEqual([
             Repository(
                 name="some_repo",
                 full_name="some_organization/some_repo",
-                html_url="https://example.com/some_organization/some_repo",
-                api_url="https://api.example.com/some_organization/some_repo",
+                html_url="https://example.com/some_owner/some_repo",
+                api_url="https://api.example.com/some_owner/some_repo",
                 description="Just some repo",
+                stars=12,
+                watching=13,
+                forks=14,
             )
         ], result)
 

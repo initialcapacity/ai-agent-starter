@@ -12,6 +12,9 @@ class Repository:
     api_url: str
     html_url: str
     description: str
+    stars: int
+    watching: int
+    forks: int
 
 
 logger = logging.getLogger(__name__)
@@ -83,4 +86,7 @@ class GithubClient(object):
             html_url=repo["html_url"],
             api_url=repo["url"],
             description=repo["description"],
+            stars=repo["stargazers_count"],
+            watching=repo["watchers_count"],
+            forks=repo["forks_count"],
         )

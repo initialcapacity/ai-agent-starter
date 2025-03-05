@@ -29,7 +29,7 @@
     <section>
         <h2>Answer</h2>
 
-        {{ response | safe}}
+        {{ response | safe }}
     </section>
 
     <section>
@@ -46,7 +46,13 @@
             {% for tool_call in tool_calls %}
                 <tr>
                     <td>{{ tool_call.name }}</td>
-                    <td>{{ tool_call.arguments }}</td>
+                    <td>
+                        <ul>
+                        {% for name, value in tool_call.arguments.items() %}
+                            <li><strong>{{ name }}:</strong> {{ value }}</li>
+                        {% endfor %}
+                        </ul>
+                    </td>
                 </tr>
             {% endfor %}
             </tbody>
