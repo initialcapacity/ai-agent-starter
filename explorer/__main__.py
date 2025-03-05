@@ -19,7 +19,9 @@ github_agent = Agent(
     client=openai_client,
     model="gpt-4o",
     instructions="You are a helpful assistant that can answer a user's questions about GitHub Repositories. "
-                 "Use the provided functions to answer the user's questions.",
+                 "Use the provided functions to answer the user's questions. "
+                 "When possible, prefer to use search functions over list functions to find lists of repositories "
+                 "matching certain criteria.",
     tools=github_tools(github_client),
 )
 

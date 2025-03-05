@@ -72,6 +72,44 @@ class TestGithubClient(unittest.TestCase):
         ], result)
 
     @responses.activate
+    def test_search_repositories(self):
+        responses.add(
+            responses.GET,
+            "https://api.github.com/search/repositories",
+            json={
+                "items": [
+                    {
+                        "name": "some_repo",
+                        "full_name": "some_organization/some_repo",
+                        "html_url": "https://example.com/some_organization/some_repo",
+                        "url": "https://api.example.com/some_organization/some_repo",
+                        "description": "Just some repo",
+                    }
+                ]
+            },
+            status=200,
+        )
+
+        result = self.client.search_repositories(
+            owner="some_organization",
+            owner_type="org",
+            language="kotlin",
+        )
+
+        self.assertEqual(1, len(responses.calls))
+        self.assertEqual("/search/repositories?q=org:some_organization%20language:kotlin", responses.calls[0].request.path_url)
+
+        self.assertEqual([
+            Repository(
+                name="some_repo",
+                full_name="some_organization/some_repo",
+                html_url="https://example.com/some_organization/some_repo",
+                api_url="https://api.example.com/some_organization/some_repo",
+                description="Just some repo",
+            )
+        ], result)
+
+    @responses.activate
     def test_list_repository_languages(self):
         responses.add(
             responses.GET,

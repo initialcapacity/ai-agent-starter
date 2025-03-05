@@ -41,6 +41,24 @@ class GithubClient(object):
 
         return [self.__repo_from_json(repo) for repo in response.json()]
 
+    def search_repositories(self, owner: str, owner_type: str, query: str = None,
+                            language: str = None) -> List[Repository]:
+        query_string = f"{owner_type}:{owner}"
+        if language is not None and language != "":
+            query_string += f"%20language:{language}"
+        if query is not None and query != "":
+            query_string += f"%20{query}"
+
+        response = requests.get(f"https://api.github.com/search/repositories?q={query_string}",
+                                headers=self.request_headers)
+        if response.status_code != 200:
+            logger.error(
+                f"Failed to search repositories: owner:{owner}, owner_type:{owner_type}, query:{query}, language:{language}, response: {response.text}")
+            return []
+
+        repositories = response.json()["items"]
+        return [self.__repo_from_json(repo) for repo in repositories]
+
     def list_repository_languages(self, repository_api_url: str) -> List[str]:
         response = requests.get(f"{repository_api_url}/languages", headers=self.request_headers)
         if response.status_code != 200:
