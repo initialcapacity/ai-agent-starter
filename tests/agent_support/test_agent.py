@@ -2,7 +2,7 @@ import unittest
 
 from openai import OpenAI
 
-from explorer.agent_support.agent import Agent
+from explorer.agent_support.agent import Agent, ToolCall
 from explorer.agent_support.tool import tool
 from explorer.environment import require_env
 from tests.slow_test_support import slow
@@ -25,6 +25,10 @@ class TestAgent(unittest.TestCase):
             tools=[get_temperature],
         )
 
-        answer = agent.answer("What is the temperature in Boulder?")
+        result = agent.answer("What is the temperature in Boulder?")
 
-        self.assertIn("86", answer)
+        self.assertIn("86", result.answer)
+        self.assertEqual([ToolCall(
+            name="get_temperature",
+            arguments={"city": "Boulder"},
+        )], result.tool_calls)
