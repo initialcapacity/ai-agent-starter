@@ -1,29 +1,11 @@
 import logging
 
-from openai import OpenAI
-
-from explorer.agent_support.agent import Agent
+from explorer.app import create_app
 from explorer.environment import Environment
-from explorer.github_support.github_client import GithubClient
-from explorer.github_tools import github_tools
 
 env = Environment.from_env()
 logging.basicConfig(level=env.root_log_level)
-logging.getLogger('httpx').setLevel(level=env.httpx_log_level)
 logging.getLogger('explorer').setLevel(level=env.explorer_log_level)
 
-openai_client = OpenAI(api_key=env.open_ai_key)
-github_client = GithubClient(access_token=env.github_token)
-
-github_agent = Agent(
-    client=openai_client,
-    model="gpt-4o",
-    instructions="You are a helpful assistant that can answer a user's questions about GitHub Repositories. "
-                 "Use the provided functions to answer the user's questions. "
-                 "When possible, prefer to use search functions over list functions to find lists of repositories "
-                 "matching certain criteria.",
-    tools=github_tools(github_client),
-)
-
-response = github_agent.answer("Who contributes to Python repositories in the initialcapacity organization?")
-print(response)
+if __name__ == '__main__':
+    create_app().run(debug=env.use_flask_debug_mode, host="0.0.0.0", port=env.port)

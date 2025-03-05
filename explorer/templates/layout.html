@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style/application.css') }}">
+
+    <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}" sizes="48x48">
+    <link rel="icon" href="{{ url_for('static', filename='images/favicon.svg') }}" sizes="any" type="image/svg+xml"/>
+
+    <link rel="preload" as="image" href="{{ url_for('static', filename='images/loader-white.svg') }}">
+
+    <title>Repository Explorer Agent</title>
+</head>
+<body>
+<header>
+    <a href="/">
+        <ul>
+            <li>
+                <svg class="logo">
+                    <use xlink:href="{{ url_for('static', filename='images/icons.svg', _anchor='logo') }}"></use>
+                </svg>
+            </li>
+            <li class="heading">
+                <h1>Repository Explorer Agent</h1>
+            </li>
+        </ul>
+    </a>
+</header>
+<footer>
+    <article>
+        <ul>
+            <li><a href="https://github.com/initialcapacity/ai-weekend-starter">View on GitHub</a></li>
+            <li><a href="https://www.ainativeweekend.com/">AI Native Weekend</a></li>
+            <li><a href="https://initialcapacity.io">Initial Capacity</a></li>
+            <li><a href="https://www.freeplay.ai/">Freeplay</a></li>
+        </ul>
+        <span>
+        <script>document.write("&copy;" + new Date().getFullYear());</script>
+        Initial Capacity, Inc.
+    </span>
+    </article>
+    <aside>
+        <img src="{{ url_for('static', filename='images/ic-logo-white.svg') }}" alt="Initial Capacity Logo">
+        <img src="{{ url_for('static', filename='images/freeplay-logo.png') }}" alt="Freeplay Logo">
+    </aside>
+</footer>
+
+<main>
+    {% block body %}{% endblock %}
+</main>
+</body>
+</html>

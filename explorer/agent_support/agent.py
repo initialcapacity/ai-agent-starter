@@ -18,7 +18,7 @@ class ToolCall:
 
 @dataclass
 class AgentResult:
-    answer: str
+    response: str
     tool_calls: List[ToolCall]
 
 
@@ -68,6 +68,6 @@ class Agent:
 
         messages = self.client.beta.threads.messages.list(thread_id=thread.id)
         return AgentResult(
-            answer=messages.data[0].content[0].text.value,
+            response=messages.data[0].content[0].text.value,
             tool_calls=tool_calls,
         )

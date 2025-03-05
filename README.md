@@ -1,4 +1,4 @@
-# GitHub Explorer Agent
+# Repository Explorer Agent
 
 An AI Agent that can answer questions about GitHub repositories for a user or an organization.
 
@@ -10,7 +10,7 @@ An AI Agent that can answer questions about GitHub repositories for a user or an
     source .env
     ```
 
-1.  Run the agent.
+1.  Run the app then visit [localhost:5050](http://localhost:5050).
     ```shell
     uv run -m explorer
     ```

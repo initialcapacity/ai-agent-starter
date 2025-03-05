@@ -1,0 +1,55 @@
+{% extends "layout.html" %}
+
+{% block body %}
+    <section>
+        <h1>What else would you like to know?</h1>
+
+        <p>Ask a question about GitHub repositories.</p>
+
+        <form action="/" method="post">
+            <fieldset>
+                <label>
+                    New Query
+                    <input type="text" name="query">
+                </label>
+                <button type="submit" class="loader">Ask</button>
+            </fieldset>
+        </form>
+        <script>
+            const form = document.querySelector('form');
+            form.onsubmit = () => form.querySelector('button').setAttribute("disabled", "disabled")
+        </script>
+    </section>
+
+    <section>
+        <h2>Question</h2>
+        <p>{{ query }}</p>
+    </section>
+
+    <section>
+        <h2>Answer</h2>
+
+        <p>{{ response }}</p>
+    </section>
+
+    <section>
+        <h2>Tool Calls</h2>
+
+        <table>
+            <thead>
+            <tr>
+                <th>Tool name</th>
+                <th>Arguments</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for tool_call in tool_calls %}
+                <tr>
+                    <td>{{ tool_call.name }}</td>
+                    <td>{{ tool_call.arguments }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </section>
+{% endblock %}

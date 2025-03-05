@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+
+{% block body %}
+    <section>
+        <h1>What would you like to know?</h1>
+
+        <p>Ask a question about GitHub repositories.</p>
+
+        <form action="/" method="post">
+            <fieldset>
+                <label>
+                    Query
+                    <input type="text" name="query">
+                </label>
+                <button type="submit" class="loader">Ask</button>
+            </fieldset>
+        </form>
+        <script>
+            const form = document.querySelector('form');
+            form.onsubmit = () => form.querySelector('button').setAttribute("disabled", "disabled")
+        </script>
+    </section>
+{% endblock %}

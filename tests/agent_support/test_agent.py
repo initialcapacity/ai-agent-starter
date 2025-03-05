@@ -27,7 +27,7 @@ class TestAgent(unittest.TestCase):
 
         result = agent.answer("What is the temperature in Boulder?")
 
-        self.assertIn("86", result.answer)
+        self.assertIn("86", result.response)
         self.assertEqual([ToolCall(
             name="get_temperature",
             arguments={"city": "Boulder"},
