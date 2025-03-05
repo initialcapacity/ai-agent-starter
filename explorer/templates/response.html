@@ -39,21 +39,20 @@
             <thead>
             <tr>
                 <th>Tool name</th>
-                <th>Arguments</th>
+                <th colspan="2">Arguments</th>
             </tr>
             </thead>
             <tbody>
             {% for tool_call in tool_calls %}
-                <tr>
-                    <td>{{ tool_call.name }}</td>
-                    <td>
-                        <ul>
-                        {% for name, value in tool_call.arguments.items() %}
-                            <li><strong>{{ name }}:</strong> {{ value }}</li>
-                        {% endfor %}
-                        </ul>
-                    </td>
-                </tr>
+                {% for name, value in tool_call.arguments.items() %}
+                    <tr>
+                        {% if loop.first %}
+                            <td rowspan="{{ tool_call.arguments | length }}">{{ tool_call.name }}</td>
+                        {% endif %}
+                        <td>{{ name }}</td>
+                        <td>{{ value }}</td>
+                    </tr>
+                {% endfor %}
             {% endfor %}
             </tbody>
         </table>
