@@ -14,6 +14,7 @@ def create_repository_agent(open_ai_client: OpenAI, github_client: GithubClient)
             Use the provided functions to answer the user's questions.
             When possible, prefer to use search functions over list functions to find lists of repositories matching certain
             criteria.
+            Provide your answers in markdown format.
         """,
         tools=github_tools(github_client)
     )

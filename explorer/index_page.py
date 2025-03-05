@@ -1,9 +1,10 @@
 from typing import Protocol
 
+import mistune
 from flask import Blueprint, render_template, request
 from flask.typing import ResponseReturnValue
 
-from explorer.agent_support.agent import Agent, AgentResult
+from explorer.agent_support.agent import AgentResult
 
 
 class AiAgent(Protocol):
@@ -26,7 +27,7 @@ def index_page(agent: AiAgent) -> Blueprint:
         return render_template(
             'response.html',
             query=user_query,
-            response=result.response,
+            response=mistune.html(result.response),
             tool_calls=result.tool_calls,
         )
 
