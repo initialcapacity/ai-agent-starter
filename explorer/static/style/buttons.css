@@ -43,6 +43,6 @@ button.loader {
     background-size: 1.5rem 1.5rem;
 
     &[disabled] {
-        background-image: url("../images/loader-white.svg");
+        background-image: url("../images/loader.svg");
     }
 }

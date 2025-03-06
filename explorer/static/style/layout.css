@@ -19,6 +19,10 @@ body > header {
     justify-content: space-between;
     align-items: center;
     padding: 0 var(--body-padding);
+
+    a {
+        text-decoration: none;
+    }
 }
 
 body > header ul {
@@ -84,8 +88,8 @@ footer {
     flex-direction: row;
     justify-content: space-between;
 
-    color: var(--inverted-text-color);
-    background-color: var(--inverted-background-color);
+    color: var(--footer-text-color);
+    background-color: var(--footer-background-color);
 
     article {
         display: flex;
@@ -108,7 +112,7 @@ footer {
 }
 
 footer a, footer a:visited {
-    color: var(--inverted-text-color);
+    color: var(--footer-text-color);
 }
 
 footer li {
