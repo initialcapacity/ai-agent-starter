@@ -1,7 +1,7 @@
 import unittest
 
-from explorer.agent_support.agent import AgentResult, ToolCall
-from explorer.index_page import index_page
+from discovery.agent_support.agent import AgentResult, ToolCall
+from discovery.index_page import index_page
 from tests.blueprint_test_support import test_client
 
 

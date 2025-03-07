@@ -2,8 +2,8 @@ import json
 from dataclasses import asdict
 from typing import List
 
-from explorer.agent_support.tool import Tool, tool
-from explorer.github_support.github_client import GithubClient
+from discovery.agent_support.tool import Tool, tool
+from discovery.github_support.github_client import GithubClient
 
 
 def github_tools(client: GithubClient) -> List[Tool]:

@@ -5,7 +5,7 @@ from typing import List
 
 from openai import OpenAI
 
-from explorer.agent_support.tool import Tool
+from discovery.agent_support.tool import Tool
 
 logger = logging.getLogger(__name__)
 

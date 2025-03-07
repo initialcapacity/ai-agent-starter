@@ -1,8 +1,8 @@
 from openai import OpenAI
 
-from explorer.agent_support.agent import Agent
-from explorer.github_support.github_client import GithubClient
-from explorer.repository_explorer.github_tools import github_tools
+from discovery.agent_support.agent import Agent
+from discovery.github_support.github_client import GithubClient
+from discovery.repository_agent.github_tools import github_tools
 
 
 def create_repository_agent(open_ai_client: OpenAI, github_client: GithubClient) -> Agent:

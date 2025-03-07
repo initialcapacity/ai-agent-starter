@@ -1,7 +1,7 @@
 import unittest
 import responses
 
-from explorer.github_support.github_client import GithubClient, Repository
+from discovery.github_support.github_client import GithubClient, Repository
 
 
 class TestGithubClient(unittest.TestCase):

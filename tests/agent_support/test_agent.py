@@ -2,9 +2,9 @@ import unittest
 
 from openai import OpenAI
 
-from explorer.agent_support.agent import Agent, ToolCall
-from explorer.agent_support.tool import tool
-from explorer.environment import require_env
+from discovery.agent_support.agent import Agent, ToolCall
+from discovery.agent_support.tool import tool
+from discovery.environment import require_env
 from tests.slow_test_support import slow
 
 

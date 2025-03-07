@@ -3,10 +3,10 @@ import logging
 from flask import Flask
 from openai import OpenAI
 
-from explorer.environment import Environment
-from explorer.github_support.github_client import GithubClient
-from explorer.index_page import index_page
-from explorer.repository_explorer.repository_agent import create_repository_agent
+from discovery.environment import Environment
+from discovery.github_support.github_client import GithubClient
+from discovery.index_page import index_page
+from discovery.repository_agent.repository_agent import create_repository_agent
 
 logger = logging.getLogger(__name__)
 

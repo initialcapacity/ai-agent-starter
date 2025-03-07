@@ -1,6 +1,6 @@
 import unittest
 
-from explorer.agent_support.tool import tool, Argument
+from discovery.agent_support.tool import tool, Argument
 
 
 @tool()

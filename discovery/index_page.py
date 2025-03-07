@@ -4,7 +4,7 @@ import mistune
 from flask import Blueprint, render_template, request
 from flask.typing import ResponseReturnValue
 
-from explorer.agent_support.agent import AgentResult
+from discovery.agent_support.agent import AgentResult
 
 
 class AiAgent(Protocol):
