@@ -17,7 +17,7 @@ class FakeAgent:
 
 class TestIndexPage(unittest.TestCase):
     def setUp(self):
-        self.client = test_client(index_page(FakeAgent()))
+        self.client = test_client(index_page(lambda token: FakeAgent()), authenticated=True)
 
     def test_index_page(self):
         response = self.client.get("/")

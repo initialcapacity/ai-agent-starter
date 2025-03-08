@@ -54,5 +54,4 @@ jobs:
           region: us-central1
           flags: --allow-unauthenticated --platform managed
           secrets: |
-            GITHUB_TOKEN=GITHUB_TOKEN:latest
             OPEN_AI_KEY=OPEN_AI_KEY:latest

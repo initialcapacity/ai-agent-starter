@@ -29,6 +29,12 @@
             </li>
         </ul>
     </a>
+    {% if g.username %}
+        <div class="actions">
+            <span>{{ g.username }}</span>
+            <a href="/logout"><svg><use xlink:href="{{ url_for('static', filename='images/icons.svg', _anchor='logout') }}"></use></svg></a>
+        </div>
+    {% endif %}
 </header>
 <footer>
     <article>

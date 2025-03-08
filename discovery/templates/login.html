@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+
+{% block body %}
+    <section>
+        <h1>Enter your GitHub Token</h1>
+
+        <form action="/login" method="post">
+            <fieldset>
+                <label>
+                    GitHub Token
+                    <input type="text" name="token">
+                </label>
+                <button type="submit" class="loader">Login</button>
+            </fieldset>
+        </form>
+        <script>
+            const form = document.querySelector('form');
+            form.onsubmit = () => form.querySelector('button').setAttribute("disabled", "disabled")
+        </script>
+    </section>
+{% endblock %}

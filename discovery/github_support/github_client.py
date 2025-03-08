@@ -1,6 +1,6 @@
 import logging
 from dataclasses import dataclass
-from typing import List
+from typing import List, Optional
 
 import requests
 
@@ -17,6 +17,11 @@ class Repository:
     forks: int
 
 
+@dataclass
+class GithubUser:
+    name: str
+
+
 logger = logging.getLogger(__name__)
 
 
@@ -28,6 +33,14 @@ class GithubClient(object):
             "X-GitHub-Api-Version": "2022-11-28",
         }
 
+    def get_user(self) -> Optional[GithubUser]:
+        response = requests.get(f"https://api.github.com/user", headers=self.request_headers)
+        if response.status_code != 200:
+            logger.error(f"Failed to get user")
+            return None
+
+        return GithubUser(name=response.json()["login"])
+
     def list_repositories_for_organization(self, organization: str) -> List[Repository]:
         response = requests.get(f"https://api.github.com/orgs/{organization}/repos", headers=self.request_headers)
         if response.status_code != 200:
@@ -37,7 +50,7 @@ class GithubClient(object):
         return [self.__repo_from_json(repo) for repo in response.json()]
 
     def list_repositories_for_user(self, user: str) -> List[Repository]:
-        response = requests.get(f"https://api.github.com/user/{user}/repos", headers=self.request_headers)
+        response = requests.get(f"https://api.github.com/users/{user}/repos", headers=self.request_headers)
         if response.status_code != 200:
             logger.error(f"Failed to get repositories for user {user}: {response.text}")
             return []

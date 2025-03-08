@@ -1,7 +1,7 @@
 import unittest
 import responses
 
-from discovery.github_support.github_client import GithubClient, Repository
+from discovery.github_support.github_client import GithubClient, Repository, GithubUser
 
 
 class TestGithubClient(unittest.TestCase):
@@ -17,6 +17,19 @@ class TestGithubClient(unittest.TestCase):
             "forks_count": 14,
         }
         self.client = GithubClient("some_access_token")
+
+    @responses.activate
+    def get_user(self):
+        responses.add(
+            responses.GET,
+            "https://api.github.com/user",
+            json={"login": "some_user"},
+            status=200,
+        )
+
+        result = self.client.get_user()
+
+        self.assertEqual(GithubUser("some_user"), result)
 
     @responses.activate
     def test_list_repositories_for_organization(self):
@@ -51,7 +64,7 @@ class TestGithubClient(unittest.TestCase):
     def test_list_repositories_for_user(self):
         responses.add(
             responses.GET,
-            "https://api.github.com/user/some_user/repos",
+            "https://api.github.com/users/some_user/repos",
             json=[self.repo_dict],
             status=200,
         )

@@ -22,6 +22,14 @@ body > header {
 
     a {
         text-decoration: none;
+        max-height: 100%;
+    }
+
+    .actions {
+        display: flex;
+        height: 1.5rem;
+        align-items: center;
+        gap: 2rem;
     }
 }
 
