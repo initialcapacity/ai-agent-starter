@@ -55,3 +55,4 @@ jobs:
           flags: --allow-unauthenticated --platform managed
           secrets: |
             OPEN_AI_KEY=OPEN_AI_KEY:latest
+            FLASK_SECRET_KEY=FLASK_SECRET_KEY:latest
