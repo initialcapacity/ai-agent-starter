@@ -32,6 +32,23 @@ class TestGithubClient(unittest.TestCase):
         self.assertEqual(GithubUser("some_user"), result)
 
     @responses.activate
+    def get_emails(self):
+        responses.add(
+            responses.GET,
+            "https://api.github.com/user/emails",
+            json=[
+                {"email": "test@example.com", "verified": True},
+                {"email": "unverified@example.com", "verified": False},
+                {"email": "another@example.com", "verified": True},
+            ],
+            status=200,
+        )
+
+        result = self.client.get_emails()
+
+        self.assertEqual(["test@example.com", "another@example.com"], result)
+
+    @responses.activate
     def test_list_repositories_for_organization(self):
         responses.add(
             responses.GET,

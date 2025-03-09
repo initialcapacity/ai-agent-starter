@@ -7,6 +7,7 @@
     export PROJECT_NUMBER={google project number}
     export OPEN_AI_KEY={api key}
     export FLASK_SECRET_KEY={flask secret key}
+    export GITHUB_CLIENT_SECRET={github client secret}
     ```
 
 1.  Create a service account for the pipeline.
@@ -92,6 +93,7 @@
     ```shell
     echo -n "$OPEN_AI_KEY" | gcloud secrets create OPEN_AI_KEY --data-file=-
     echo -n "$FLASK_SECRET_KEY" | gcloud secrets create FLASK_SECRET_KEY --data-file=-
+    echo -n "$GITHUB_CLIENT_SECRET" | gcloud secrets create GITHUB_CLIENT_SECRET --data-file=-
     ```
 
 1.  Allow the default service account to access secrets.

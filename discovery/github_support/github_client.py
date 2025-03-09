@@ -36,10 +36,18 @@ class GithubClient(object):
     def get_user(self) -> Optional[GithubUser]:
         response = requests.get(f"https://api.github.com/user", headers=self.request_headers)
         if response.status_code != 200:
-            logger.error(f"Failed to get user")
+            logger.error(f"Failed to get user: %s", response.text)
             return None
 
         return GithubUser(name=response.json()["login"])
+
+    def get_emails(self) -> List[str]:
+        response = requests.get(f"https://api.github.com/user/emails", headers=self.request_headers)
+        if response.status_code != 200:
+            logger.error(f"Failed to get emails for user: %s", response.text)
+            return []
+
+        return [email["email"] for email in response.json() if email["verified"]]
 
     def list_repositories_for_organization(self, organization: str) -> List[Repository]:
         response = requests.get(f"https://api.github.com/orgs/{organization}/repos", headers=self.request_headers)
