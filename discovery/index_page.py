@@ -7,6 +7,8 @@ from flask.typing import ResponseReturnValue
 from discovery.agent_support.agent import AgentResult
 from discovery.auth.requre_authentication import require_authentication
 from discovery.github_support.github_client import GithubClient
+from discovery.local_repo_support.local_repo_client import LocalRepoClient
+from discovery.local_repo_support.scc_client import SccClient
 
 
 class AiAgent(Protocol):
@@ -14,7 +16,7 @@ class AiAgent(Protocol):
         ...
 
 
-def index_page(agent_creator: Callable[[GithubClient], AiAgent]) -> Blueprint:
+def index_page(agent_creator: Callable[[GithubClient, LocalRepoClient, SccClient], AiAgent]) -> Blueprint:
     page = Blueprint('index_page', __name__)
 
     @page.get('/')
@@ -26,7 +28,7 @@ def index_page(agent_creator: Callable[[GithubClient], AiAgent]) -> Blueprint:
     @require_authentication
     def query() -> ResponseReturnValue:
         user_query = request.form.get('query')
-        agent = agent_creator(GithubClient(g.github_token))
+        agent = agent_creator(GithubClient(g.github_token), LocalRepoClient(), SccClient())
         result = agent.answer(user_query)
 
         return render_template(
