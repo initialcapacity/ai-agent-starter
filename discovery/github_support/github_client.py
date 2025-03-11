@@ -11,6 +11,7 @@ class Repository:
     full_name: str
     api_url: str
     html_url: str
+    private: bool
     description: str
     stars: int
     watching: int
@@ -106,6 +107,7 @@ class GithubClient(object):
             full_name=repo["full_name"],
             html_url=repo["html_url"],
             api_url=repo["url"],
+            private=repo["private"],
             description=repo["description"],
             stars=repo["stargazers_count"],
             watching=repo["watchers_count"],
