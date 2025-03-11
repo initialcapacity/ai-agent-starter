@@ -17,7 +17,7 @@ def analysis_tools(local_repo_client: LocalRepoClient, scc_client: SccClient) ->
         return "Done"
 
     @tool()
-    def analysis_code(repository_api_url: str) -> str:
+    def analyze_code(repository_api_url: str) -> str:
         """
         Analyze and produce a report for a repository.
         The repository needs to be checked out before this can be run.
@@ -38,5 +38,5 @@ def analysis_tools(local_repo_client: LocalRepoClient, scc_client: SccClient) ->
     return [
         is_repositories_checked_out,
         check_out_repositories,
-        analysis_code,
+        analyze_code,
     ]
