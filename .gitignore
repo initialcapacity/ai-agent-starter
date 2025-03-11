@@ -1,4 +1,5 @@
 .venv
 .env
+.envrc
 .env.docker
 .idea
