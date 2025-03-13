@@ -67,4 +67,18 @@ Users are allowed to access the application if one of their verified email addre
 1. Run with docker
    ```shell
    docker run -p 5050:5050 --env-file .env.docker repository-discovery
-   ```   
+   ```
+
+# Exercise
+
+## Create a tool
+
+Using the [github rest documentation](https://docs.github.com/en/rest), add a new tool.
+1. In the `github_tools.py` file, define a method that will be used to leverage the api endpoint you have chosen.
+2. Within the method, using the python doc format, add query language for openai to use.
+3. Add the `@tool()` decorator on the method you just defined.
+4. Within the `github_tools.py` file, define a new method for the api call that the tool will leverage to fetch data.
+5. Using the new api call, you defined, fetch the data within the tool and return it as a `json dump`.
+6. Register the new tool by adding it to the list of tools that are returned by the `github_tools` method.
+
+Run the application and see if you can have openapi use your tool to fetch data.
