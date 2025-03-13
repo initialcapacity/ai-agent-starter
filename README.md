@@ -74,11 +74,26 @@ Users are allowed to access the application if one of their verified email addre
 ## Create a tool
 
 Using the [github rest documentation](https://docs.github.com/en/rest), add a new tool.
-1. In the `github_tools.py` file, define a method that will be used to leverage the api endpoint you have chosen.
+1. In the `github_tools.py` file, define a method that will be used to leverage the API endpoint you have chosen.
 2. Within the method, using the python doc format, add query language for openai to use.
 3. Add the `@tool()` decorator on the method you just defined.
-4. Within the `github_tools.py` file, define a new method for the api call that the tool will leverage to fetch data.
-5. Using the new api call, you defined, fetch the data within the tool and return it as a `json dump`.
+4. Within the `github_tools.py` file, define a new method for the API call that the tool will leverage to fetch data.
+5. Using the new API call, you defined, fetch the data within the tool and return it as a `json dump`.
 6. Register the new tool by adding it to the list of tools that are returned by the `github_tools` method.
 
-Run the application and see if you can have openapi use your tool to fetch data.
+Run the application and see if you can have openAPI use your tool to fetch data.
+
+## Add a test for the new tool
+
+We want to make sure the Agent integrates properly and uses our tool.
+These tests invoke the LLM and take more time to run.
+There can be multiple ways of getting a result from an agent so when we are testing our agents
+we are focusing on the tools we expect the agent to use is correct and the response is correct.
+Test the tool that was added by following these steps:
+
+1. Define a `test_` method that will cover the new tool that was added.
+2. Decorate the test method with the `@slow` decorator.
+3. Add the `@responses.activate` decorator to the method so we can stub out the API call.
+4. Stub the API that the tool you are testing uses.
+5. Send a question to the agent and assert the response is what you are expecting.
+6. Validate that the tool you think the LLM will use is used.

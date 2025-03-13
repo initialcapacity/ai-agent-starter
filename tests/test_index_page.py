@@ -6,7 +6,8 @@ from tests.blueprint_test_support import test_client
 
 
 class FakeAgent:
-    def answer(self, question: str) -> AgentResult:
+    @staticmethod
+    def answer(_: str) -> AgentResult:
         return AgentResult(
             response="Some response",
             tool_calls=[
