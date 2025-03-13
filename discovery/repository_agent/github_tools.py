@@ -34,15 +34,23 @@ def github_tools(client: GithubClient) -> List[Tool]:
         return json.dumps([asdict(repo) for repo in repositories])
 
     @tool()
-    def list_repository_languages(repository_api_url: str) -> str:
-        """Gets a list of languages for a given repository"""
-        languages = client.list_repository_languages(repository_api_url)
+    def list_repository_languages(full_name: str) -> str:
+        """
+        Gets a list of languages for a given repository
+
+        full_name: The full name of the repository, for example: "owner/repo"
+        """
+        languages = client.list_repository_languages(full_name)
         return json.dumps(languages)
 
     @tool()
-    def list_repository_contributors(repository_api_url: str) -> str:
-        """Gets a list of contributors for a given repository"""
-        contributors = client.list_repository_contributors(repository_api_url)
+    def list_repository_contributors(full_name: str) -> str:
+        """
+        Gets a list of contributors for a given repository
+
+        full_name: The full name of the repository, for example: "owner/repo"
+        """
+        contributors = client.list_repository_contributors(full_name)
         return json.dumps(contributors)
 
     return [

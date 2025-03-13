@@ -84,18 +84,18 @@ class GithubClient(object):
         repositories = response.json()["items"]
         return [self.__repo_from_json(repo) for repo in repositories]
 
-    def list_repository_languages(self, repository_api_url: str) -> List[str]:
-        response = requests.get(f"{repository_api_url}/languages", headers=self.request_headers)
+    def list_repository_languages(self, full_name: str) -> List[str]:
+        response = requests.get(f"https://api.github.com/repos/{full_name}/languages", headers=self.request_headers)
         if response.status_code != 200:
-            logger.error(f"Failed to get languages for {repository_api_url}: {response.text}")
+            logger.error(f"Failed to get languages for {full_name}: {response.text}")
             return []
 
         return [key for key in response.json().keys()]
 
-    def list_repository_contributors(self, repository_api_url: str) -> List[str]:
-        response = requests.get(f"{repository_api_url}/contributors", headers=self.request_headers)
+    def list_repository_contributors(self, full_name: str) -> List[str]:
+        response = requests.get(f"https://api.github.com/repos/{full_name}/contributors", headers=self.request_headers)
         if response.status_code != 200:
-            logger.error(f"Failed to get contributors for {repository_api_url}: {response.text}")
+            logger.error(f"Failed to get contributors for {full_name}: {response.text}")
             return []
 
         return [user["login"] for user in response.json()]

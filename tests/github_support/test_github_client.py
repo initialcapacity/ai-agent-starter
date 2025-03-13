@@ -143,7 +143,7 @@ class TestGithubClient(unittest.TestCase):
     def test_list_repository_languages(self):
         responses.add(
             responses.GET,
-            "https://api.example.com/some_repo/languages",
+            "https://api.github.com/repos/some_owner/some_repo/languages",
             json={
                 "python": 100,
                 "html": 50,
@@ -152,7 +152,7 @@ class TestGithubClient(unittest.TestCase):
             status=200,
         )
 
-        result = self.client.list_repository_languages("https://api.example.com/some_repo")
+        result = self.client.list_repository_languages("some_owner/some_repo")
 
         self.assertCountEqual(["python", "html", "css"], result)
 
@@ -160,7 +160,7 @@ class TestGithubClient(unittest.TestCase):
     def test_list_repository_contributors(self):
         responses.add(
             responses.GET,
-            "https://api.example.com/some_repo/contributors",
+            "https://api.github.com/repos/some_owner/some_repo/contributors",
             json=[
                 {"login": "fred"},
                 {"login": "mary"},
@@ -169,6 +169,6 @@ class TestGithubClient(unittest.TestCase):
             status=200,
         )
 
-        result = self.client.list_repository_contributors("https://api.example.com/some_repo")
+        result = self.client.list_repository_contributors("some_owner/some_repo")
 
         self.assertCountEqual(["fred", "mary", "kate"], result)
