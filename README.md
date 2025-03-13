@@ -58,42 +58,45 @@ Users are allowed to access the application if one of their verified email addre
 
 ## Build container
 
-1. Build container
-   ```shell
-   uv pip compile pyproject.toml -o requirements.txt
-   docker build -t repository-discovery .
-   ```
+1.  Build container
+    ```shell
+    uv pip compile pyproject.toml -o requirements.txt
+    docker build -t repository-discovery .
+    ```
 
-1. Run with docker
-   ```shell
-   docker run -p 5050:5050 --env-file .env.docker repository-discovery
-   ```
+1.  Run with docker
+    ```shell
+    docker run -p 5050:5050 --env-file .env.docker repository-discovery
+    ```
 
 # Exercise
 
 ## Create a tool
 
-Using the [github rest documentation](https://docs.github.com/en/rest), add a new tool.
-1. In the `github_tools.py` file, define a method that will be used to leverage the API endpoint you have chosen.
-2. Within the method, using the python doc format, add query language for openai to use.
-3. Add the `@tool()` decorator on the method you just defined.
-4. Within the `github_tools.py` file, define a new method for the API call that the tool will leverage to fetch data.
-5. Using the new API call, you defined, fetch the data within the tool and return it as a `json dump`.
-6. Register the new tool by adding it to the list of tools that are returned by the `github_tools` method.
+Use the [GitHub API documentation](https://docs.github.com/en/rest) and add a new tool.
 
-Run the application and see if you can have openAPI use your tool to fetch data.
+1.  In the [GithubClient](./discovery/github_support/github_client.py), define a method that calls the GitHub API
+    endpoint you've chosen.
+1.  Add a function to [github_tools](./discovery/repository_agent/github_tools.py) that calls your new method in the
+    GitHub client.
+    Return a JSON string of the data returned by the method.
+1.  Add a Python docstring to your function that describes how OpenAI should use the function.
+1.  Add the `@tool()` decorator to the function.
+1.  Register the new tool by adding it to the list of tools that are returned by the `github_tools` method.
+
+Run the application and see if you can have OpenAI use your tool to fetch data.
 
 ## Add a test for the new tool
 
-We want to make sure the Agent integrates properly and uses our tool.
-These tests invoke the LLM and take more time to run.
-There can be multiple ways of getting a result from an agent so when we are testing our agents
-we are focusing on the tools we expect the agent to use is correct and the response is correct.
-Test the tool that was added by following these steps:
+Now make sure the agent integrates properly with OpenAI to use your tool.
+This test will use the LLM and take more time to run.
+The focus of the test should be to check that the agent uses the correct tool to answer the question, but we have
+limited ability to check that the response is correct.
 
-1. Define a `test_` method that will cover the new tool that was added.
-2. Decorate the test method with the `@slow` decorator.
-3. Add the `@responses.activate` decorator to the method so we can stub out the API call.
-4. Stub the API that the tool you are testing uses.
-5. Send a question to the agent and assert the response is what you are expecting.
-6. Validate that the tool you think the LLM will use is used.
+1.  Define a `test_` method  in [test_repository_agent.py](./tests/repository_agent/test_repository_agent.py) that will
+    cover the new tool that was added.
+1.  Decorate the test method with the `@slow` decorator.
+1.  Add the `@responses.activate` decorator to the method to enable stubbing the API call.
+1.  Stub the API that your tool uses.
+1.  Send a question to the agent and assert the correct tools are called
+1.  Next assert the response by spot checking for relevant word(s).
