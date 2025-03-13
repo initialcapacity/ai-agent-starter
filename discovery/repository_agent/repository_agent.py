@@ -10,7 +10,7 @@ from discovery.repository_agent.github_tools import github_tools
 def repository_agent_creator(open_ai_client: OpenAI) -> Callable[[GithubClient], Agent]:
     return lambda github_client: Agent(
         client=open_ai_client,
-        model="gpt-4o",
+        model="gpt-4o-mini",
         instructions="""
             You are a helpful assistant that can answer a user's questions about GitHub Repositories.
             Use the provided functions to answer the user's questions.
