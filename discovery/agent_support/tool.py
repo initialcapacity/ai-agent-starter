@@ -2,6 +2,8 @@ from dataclasses import dataclass
 from typing import Callable, List
 from inspect import signature, Parameter
 
+from typing_extensions import deprecated
+
 
 @dataclass
 class Argument:
@@ -9,7 +11,7 @@ class Argument:
     type: str
     required: bool
 
-
+@deprecated
 @dataclass
 class Tool:
     name: str

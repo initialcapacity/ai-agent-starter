@@ -3,9 +3,9 @@ import logging
 from dataclasses import dataclass
 from typing import List
 
+from agents import Agent as OpenAIAgent
 from openai import OpenAI
-
-from discovery.agent_support.tool import Tool
+from openai.types.beta import FunctionTool
 
 logger = logging.getLogger(__name__)
 
@@ -23,14 +23,20 @@ class AgentResult:
 
 
 class Agent:
-    def __init__(self, client: OpenAI, model: str, instructions: str, tools: List[Tool]):
+    def __init__(self, client: OpenAI, model: str, instructions: str, tools: List[FunctionTool]):
         self.client = client
         self.tools = tools
-        self.assistant_id = client.beta.assistants.create(
+        # self.assistant_id = client.beta.assistants.create(
+        #     instructions=instructions,
+        #     model=model,
+        #     tools=[tool.schema() for tool in tools]
+        # ).id
+        self.agent = OpenAIAgent(
+            name="AI Native Weekend Agent",
             instructions=instructions,
             model=model,
-            tools=[tool.schema() for tool in tools]
-        ).id
+            tools=tools,
+        )
 
     def answer(self, question: str) -> AgentResult:
         thread = self.client.beta.threads.create()

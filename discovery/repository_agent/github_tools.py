@@ -2,24 +2,26 @@ import json
 from dataclasses import asdict
 from typing import List
 
-from discovery.agent_support.tool import Tool, tool
+from agents import function_tool
+from openai.types.beta import FunctionTool
+
 from discovery.github_support.github_client import GithubClient
 
 
-def github_tools(client: GithubClient) -> List[Tool]:
-    @tool()
+def github_tools(client: GithubClient) -> List[FunctionTool]:
+    @function_tool
     def list_repositories_for_organization(organization: str) -> str:
         """Gets a list of repositories for a given organization"""
         org_repositories = client.list_repositories_for_organization(organization)
         return json.dumps([asdict(repo) for repo in org_repositories])
 
-    @tool()
+    @function_tool
     def list_repositories_for_user(user: str) -> str:
         """Gets a list of repositories for a given user"""
         user_repositories = client.list_repositories_for_user(user)
         return json.dumps([asdict(repo) for repo in user_repositories])
 
-    @tool()
+    @function_tool
     def search_repositories(owner: str, owner_type: str, query: str = None, language: str = None) -> str:
         """
         Search for repositories matching the criteria given in the arguments
@@ -33,7 +35,7 @@ def github_tools(client: GithubClient) -> List[Tool]:
         repositories = client.search_repositories(owner, owner_type, query, language)
         return json.dumps([asdict(repo) for repo in repositories])
 
-    @tool()
+    @function_tool
     def list_repository_languages(full_name: str) -> str:
         """
         Gets a list of languages for a given repository
@@ -43,7 +45,7 @@ def github_tools(client: GithubClient) -> List[Tool]:
         languages = client.list_repository_languages(full_name)
         return json.dumps(languages)
 
-    @tool()
+    @function_tool
     def list_repository_contributors(full_name: str) -> str:
         """
         Gets a list of contributors for a given repository
