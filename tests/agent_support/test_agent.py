@@ -9,7 +9,7 @@ from tests.slow_test_support import slow
 
 
 @tool()
-def get_temperature(city: str) -> str:
+def get_temperature(city: str, unrelated: str = "") -> str:
     """Gets the temperature for a given city"""
     return "86"
 
@@ -19,7 +19,7 @@ class TestAgent(unittest.TestCase):
         agent = Agent(
             client=OpenAI(api_key=require_env("OPEN_AI_KEY")),
             model="gpt-4o",
-            instructions="You are a helpful assistant that can answer questions about weather. "
+            system_instructions="You are a helpful assistant that can answer questions about weather. "
                          "Use the only the functions provided to answer the user's question."
                          "You must always use the provided function.",
             tools=[get_temperature],

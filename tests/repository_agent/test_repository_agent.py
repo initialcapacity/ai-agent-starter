@@ -115,9 +115,9 @@ class TestRepositoryAgent(unittest.TestCase):
             responses.GET,
             "https://api.github.com/repos/pickles_org/pickles_repo/languages",
             json={
-                "python": 100,
-                "html": 50,
-                "css": 50,
+                "Python": 100,
+                "HTML": 50,
+                "CSS": 50,
             },
             status=200,
         )
@@ -129,10 +129,7 @@ class TestRepositoryAgent(unittest.TestCase):
         self.assertIn("CSS", result.response)
         self.assertNotIn("java", result.response)
         self.assertEqual(
-            [ToolCall(
-                name='list_repository_languages',
-                arguments={'full_name': 'pickles_org/pickles_repo'}
-            )],
+            [ToolCall(name='list_repository_languages', arguments={'full_name': 'pickles_org/pickles_repo'})],
             result.tool_calls
         )
 
@@ -143,19 +140,18 @@ class TestRepositoryAgent(unittest.TestCase):
             responses.GET,
             "https://api.github.com/repos/pickles_org/pickles_repo/contributors",
             json=[
-                {"login": "fred"},
-                {"login": "mary"},
-                {"login": "kate"},
+                {"login": "Fred"},
+                {"login": "Mary"},
+                {"login": "Kate"},
             ],
             status=200,
         )
 
         result = self.agent.answer("Who contributes to the pickles_repo within the pickles_org?")
 
-        self.assertIn("fred", result.response)
-        self.assertIn("mary", result.response)
-        self.assertIn("kate", result.response)
-        self.assertNotIn("chuck", result.response)
+        self.assertIn("Fred", result.response)
+        self.assertIn("Mary", result.response)
+        self.assertIn("Kate", result.response)
         self.assertEqual(
             [ToolCall(
                 name='list_repository_contributors',

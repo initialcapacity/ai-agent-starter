@@ -4,6 +4,9 @@ from dataclasses import dataclass
 from typing import List
 
 from openai import OpenAI
+from openai.types.responses import EasyInputMessageParam, Response, ResponseFunctionToolCallParam, \
+    ResponseFunctionToolCall
+from openai.types.responses.response_input_param import Message, ResponseInputParam, FunctionCallOutput
 
 from discovery.agent_support.tool import Tool
 
@@ -23,51 +26,55 @@ class AgentResult:
 
 
 class Agent:
-    def __init__(self, client: OpenAI, model: str, instructions: str, tools: List[Tool]):
+    def __init__(self, client: OpenAI, model: str, system_instructions: str, tools: List[Tool]):
         self.client = client
+        self.model = model
+        self.instructions = system_instructions
         self.tools = tools
-        self.assistant_id = client.beta.assistants.create(
-            instructions=instructions,
-            model=model,
-            tools=[tool.schema() for tool in tools]
-        ).id
+        self.tool_params = [tool.tool_param() for tool in tools]
 
     def answer(self, question: str) -> AgentResult:
-        thread = self.client.beta.threads.create()
-        tool_calls = []
-        self.client.beta.threads.messages.create(
-            thread_id=thread.id,
-            role="user",
-            content=question,
-        )
+        messages: ResponseInputParam = [
+            EasyInputMessageParam(role="system", content=self.instructions),
+            EasyInputMessageParam(role="user", content=question)
+        ]
 
-        run = self.client.beta.threads.runs.create_and_poll(thread_id=thread.id, assistant_id=self.assistant_id)
-        while run.status != "completed":
-            logger.debug(f"status %s", run.status)
-            tool_outputs = []
-            for tool_call in run.required_action.submit_tool_outputs.tool_calls:
-                tool_name = tool_call.function.name
-                arguments = json.loads(tool_call.function.arguments)
-                logger.debug(f"calling %s with args %s", tool_name, arguments)
+        response: Response = self.client.responses.create(model=self.model, input=messages, tools=self.tool_params)
 
-                tool = next((tool for tool in self.tools if tool.name == tool_name), None)
-                if tool is None:
-                    raise Exception(f"No tool found with name {tool_name}")
+        while response.output_text == "":
+            for tool_call in response.output:
+                if not isinstance(tool_call, ResponseFunctionToolCall):
+                    continue
+                new_messages = self.invoke_tool(tool_call)
+                messages.extend(new_messages)
 
-                tool_calls.append(ToolCall(name=tool_name, arguments=arguments))
-                tool_outputs.append({
-                    "tool_call_id": tool_call.id,
-                    "output": tool.action(**arguments),
-                })
+            response = self.client.responses.create(model=self.model, input=messages, tools=self.tool_params)
 
-            run = self.client.beta.threads.runs.submit_tool_outputs_and_poll(
-                thread_id=thread.id,
-                run_id=run.id,
-                tool_outputs=tool_outputs,
+        tool_calls = [
+            ToolCall(name=message["name"], arguments=json.loads(message["arguments"]))
+            for message in messages if "type" in message and message["type"] == "function_call"
+        ]
+
+        return AgentResult(response=response.output_text, tool_calls=tool_calls)
+
+    def invoke_tool(self, tool_call: ResponseFunctionToolCall) -> ResponseInputParam:
+        arguments = json.loads(tool_call.arguments)
+        logger.debug(f"calling %s with args %s", tool_call.name, arguments)
+        tool = next((tool for tool in self.tools if tool.name == tool_call.name), None)
+        if tool is None:
+            raise Exception(f"No tool found with name {tool_call.name}")
+
+        return [
+            ResponseFunctionToolCallParam(
+                id=tool_call.id,
+                arguments=tool_call.arguments,
+                call_id=tool_call.call_id,
+                name=tool_call.name,
+                type="function_call",
+            ),
+            FunctionCallOutput(
+                call_id=tool_call.call_id,
+                output=tool.invoke(**arguments),
+                type="function_call_output",
             )
-
-        messages = self.client.beta.threads.messages.list(thread_id=thread.id)
-        return AgentResult(
-            response=messages.data[0].content[0].text.value,
-            tool_calls=tool_calls,
-        )
+        ]

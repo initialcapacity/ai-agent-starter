@@ -11,7 +11,7 @@ def repository_agent_creator(open_ai_client: OpenAI) -> Callable[[GithubClient],
     return lambda github_client: Agent(
         client=open_ai_client,
         model="gpt-4o-mini",
-        instructions="""
+        system_instructions="""
             You are a helpful assistant that can answer a user's questions about GitHub Repositories.
             Use the provided functions to answer the user's questions.
             When possible, prefer to use search functions over list functions to find lists of repositories matching certain

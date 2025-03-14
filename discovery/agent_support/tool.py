@@ -2,6 +2,8 @@ from dataclasses import dataclass
 from typing import Callable, List
 from inspect import signature, Parameter
 
+from openai.types.responses import FunctionToolParam
+
 
 @dataclass
 class Argument:
@@ -14,25 +16,25 @@ class Argument:
 class Tool:
     name: str
     description: str
-    action: Callable
+    invoke: Callable
     arguments: List[Argument]
 
-    def schema(self) -> dict:
-        return {
-            "type": "function",
-            "function": {
-                "name": self.name,
-                "description": self.description,
-                "parameters": {
-                    "type": "object",
-                    "properties": {
-                        argument.name: {"type": argument.type}
-                        for argument in self.arguments
-                    },
-                    "required": [argument.name for argument in self.arguments if argument.required],
-                }
-            }
-        }
+    def tool_param(self) -> FunctionToolParam:
+        return FunctionToolParam(
+            name=self.name,
+            parameters={
+                "type": "object",
+                "properties": {
+                    argument.name: {"type": argument.type}
+                    for argument in self.arguments
+                },
+                "required": [argument.name for argument in self.arguments if argument.required],
+                "additionalProperties": False,
+            },
+            strict=False,
+            type="function",
+            description=self.description,
+        )
 
 
 def json_type(parameter: Parameter) -> str:
@@ -67,7 +69,7 @@ def tool() -> Callable[[Callable], Tool]:
         return Tool(
             name=action.__name__,
             description=action.__doc__,
-            action=action,
+            invoke=action,
             arguments=[argument_from_parameter(parameter) for parameter in parameters]
         )
 
