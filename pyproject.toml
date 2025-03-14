@@ -9,6 +9,7 @@ dependencies = [
     "gunicorn>=23.0.0",
     "mistune>=3.1.2",
     "openai>=1.66.3",
+    "openai-agents>=0.0.4",
     "requests>=2.32.3",
 ]
 
