@@ -6,7 +6,7 @@ from typing import List
 from openai import OpenAI
 from openai.types.responses import EasyInputMessageParam, Response, ResponseFunctionToolCallParam, \
     ResponseFunctionToolCall
-from openai.types.responses.response_input_param import Message, ResponseInputParam, FunctionCallOutput
+from openai.types.responses.response_input_param import ResponseInputParam, FunctionCallOutput
 
 from discovery.agent_support.tool import Tool
 
