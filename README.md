@@ -1,6 +1,6 @@
 # Repository Discovery Agent
 
-An AI Agent that can answer questions about GitHub repositories for a user or an organization.
+An AI agent that can answer questions about GitHub repositories for a user or an organization.
 
 ## Run
 
